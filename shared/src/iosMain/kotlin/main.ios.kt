@@ -1,5 +1,6 @@
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.interop.UIKitView
 import androidx.compose.ui.window.ComposeUIViewController
@@ -21,13 +22,14 @@ fun MainViewController() = ComposeUIViewController {
 @OptIn(ExperimentalForeignApi::class)
 @Composable
 fun WebView(modifier: Modifier, url: String) {
+    val rememberedNavigationDelegate = remember { WKNavigationDelegate() }
     UIKitView(
         modifier = modifier,
         factory = {
             WKWebView(
                 frame = CGRectZero.readValue(),
             ).apply {
-                navigationDelegate = WKNavigationDelegate()
+                navigationDelegate = rememberedNavigationDelegate
                 loadRequest(
                     request = NSURLRequest(
                         uRL = NSURL(string = url),
